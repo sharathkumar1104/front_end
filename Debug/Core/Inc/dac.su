@@ -1,0 +1,2 @@
+../Core/Inc/dac.c:4:6:DAC_init	4	static
+../Core/Inc/dac.c:15:6:Write	16	static

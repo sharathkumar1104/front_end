@@ -1,0 +1,5 @@
+../Core/Src/test.c:4:6:test_abc_to_dq	1
+../Core/Src/test.c:35:6:test_voltageController	4
+../Core/Src/test.c:62:6:test_currentControlTriggered	1
+../Core/Src/test.c:83:6:test_dq_to_abc	2
+../Core/Src/test.c:94:6:test_dq_to_pwm	2

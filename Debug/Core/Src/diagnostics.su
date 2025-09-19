@@ -1,0 +1,3 @@
+../Core/Src/diagnostics.c:6:6:instantaneousDiagnostics	8	static
+../Core/Src/diagnostics.c:44:6:rmsDiagnostics	8	static
+../Core/Src/diagnostics.c:64:6:averageDiagnostics	8	static

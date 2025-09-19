@@ -1,0 +1,2 @@
+../Core/Inc/adc.c:7:6:ADC_init	2
+../Core/Inc/adc.c:42:6:DMA_init	2

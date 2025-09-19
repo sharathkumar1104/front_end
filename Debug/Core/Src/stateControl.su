@@ -1,0 +1,3 @@
+../Core/Src/stateControl.c:7:6:stateControl	8	static
+../Core/Src/stateControl.c:37:6:state0_Control_Code	4	static
+../Core/Src/stateControl.c:88:6:state1_Control_Code	4	static
