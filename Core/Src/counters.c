@@ -22,7 +22,7 @@ void Counters(void){
 
 
 
-///////////////////////////////////////////
+
 void inverterOff(void){
 	//pulses_off()
 }

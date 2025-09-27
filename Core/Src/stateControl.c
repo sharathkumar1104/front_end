@@ -16,6 +16,7 @@ void stateControl(void)
 	    case state1 :
 	    {
 
+	    	state1_Control_Code();
 	    	break;
 	    }
 	    case state2:
@@ -102,9 +103,9 @@ void state1_Control_Code(void){
 	else
 	{
 
-//		voltageController();
-//		currentControlTriggered();
-//		dq_to_abc();
+		voltageController();
+		currentControlTriggered();
+		dq_to_abc();
 
 	}
 }

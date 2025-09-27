@@ -238,15 +238,89 @@ struct Counters
 };
 
 
+// Structure for Rms Values
+struct Rms_Calculations
+{
+	volatile float Ia, Ib, Ic;
+	volatile float Va, Vb, Vc;
+	volatile float Ia_sum;
+	volatile float Ib_sum;
+	volatile float Ic_sum;
+	volatile float Va_sum;
+	volatile float Vb_sum;
+	volatile float Vc_sum;
+	volatile float theta;
+	volatile float theta_prev;
+	volatile bool busy_flag;
+	volatile bool request;
+	volatile int n;
+	volatile int final_N;
+};
+
+struct Avg_of_mean_square
+{
+	volatile float Ia, Ib, Ic;
+	volatile float Va, Vb, Vc;
+};
+
+// Structure for Rms Values
+struct Avg_Calculations
+{
+	volatile float Vdc, Idc;
+	volatile float Vdc_sum, Idc_sum;
+	volatile float theta;
+    volatile float theta_prev;
+	volatile bool busy_flag;
+	volatile bool request;
+	volatile int n;
+	volatile int final_N;
+};
+
+struct Avg_Sum
+{
+	volatile float Vdc_sum;
+	volatile float Idc_sum;
+};
+
+// Structure for Adc Readings
+struct Adc_Readings
+{
+	float offSet;
+	float voltage_gain_factor;
+	float current_gain_factor;
+	float Vdc_gain_factor;
+	float Idc_gain_factor;
+	int Vab_in, Vbc_in, Vca_in;
+	int ia_in, ib_in, ic_in;
+    float Vdc_in, idc_in;
+    float Vab_corrected;
+    float Vbc_corrected;
+    float Vca_corrected;
+    float ia_corrected;
+    float ib_corrected;
+    float ic_corrected;
+    float Vdc_corrected;
+    float Idc_corrected;
+    float Vab_recalculated;
+    float Vbc_recalculated;
+    float Vca_recalculated;
+    float ia_recalculated;
+    float ib_recalculated;
+    float ic_recalculated;
+    float Vdc_recalculated;
+    float Idc_recalculated;
+    float Va, Vb, Vc, ia, ib, ic, Vdc, Idc;
+
+};
+
+
 /***********************************************************************/
 //                     Global Variables
 /***********************************************************************/
 
-// STATE MACHINE
-extern volatile StateControl state;
-extern volatile uint32_t first_time_state_entry;
-
-
+// ADC
+extern volatile struct Adc_Readings adc_read;
+extern volatile uint16_t adc_buffer[ADC_LENGHT];
 
 // COUNTERS
 extern volatile struct Counters counters;
@@ -254,12 +328,33 @@ extern volatile bool relayOff_counter_enable;
 extern volatile uint32_t delay_time;
 extern volatile uint32_t tick_counter;
 
+// STATE MACHINE
+extern volatile StateControl state;
+extern volatile uint32_t first_time_state_entry;
 
 // LIMIT PARAMETERS
 extern volatile struct Limit_Parameters UCoffLimit;
 extern volatile struct Limit_Parameters UCinLimit;
 extern volatile struct Limit_Parameters LCoffLimit;
 extern volatile struct Limit_Parameters LCinLimit;
+
+// FLAGS AND COUNTERS FOR RMS AND AVG CALCULATIONS
+extern volatile struct Rms_Calculations rms_calculations;
+extern volatile struct Rms_Calculations final_squared_sum;
+extern volatile struct Avg_of_mean_square avg_of_mean_square;
+//extern volatile bool rms_calculation_busy_flag;
+//extern volatile bool rms_calculation_req;
+//extern volatile int n;
+//extern volatile int final_N;
+
+extern volatile struct Avg_Calculations avg_calculations;
+extern volatile struct Avg_Calculations final_sum;
+//extern volatile bool avg_calculation_busy_flag;
+//extern volatile bool avg_calculation_req;
+//extern volatile int m;
+//extern volatile int final_M;
+//extern volatile float theta_prev;
+//extern volatile float theta;
 
 // DIAGNOSTICS VARIABLES
 extern volatile struct RMS_Variables rmsVal;
@@ -274,34 +369,56 @@ extern const float va_array[];
 extern const float vb_array[];
 extern const float vc_array[];
 
+extern const float ia_array[];
+extern const float ib_array[];
+extern const float ic_array[];
+
 // CONTROL LOOPS
 extern volatile struct Voltage_Controller_Variables voltage_ctrl;
 extern volatile struct Current_Controller_Variables current_ctrl;
 extern volatile struct dq_to_abc abc_form;
 
-// TIMERS AND ADC
+// TIMERS
 extern volatile struct Timer3_Variables timer3_variables;
-extern volatile uint16_t adc_buffer[ADC_LENGHT];
+
 
 
 /***********************************************************************/
 //                      FUNCTION PROTOTYPES
 /***********************************************************************/
 
+// Called inside interrupt of 100us
 void Counters(void);
 
+// Called inside interrupt of 100us
+void adcReadings(void);
+
+// Called inside interrupt of 100us
 void PLL(void);                        // PLL routine
 void abc_to_dq(void);                  // abc → dq transformation
 void check_if_PLL_locked(void);        // PLL lock status check
-void voltageController(void);          // Voltage control loop
-void currentControlTriggered(void);    // Current control routine
-void dq_to_abc(void);                  // dq → abc transformation
+
+// Called inside interrupt of 100us
+void rms_calculation_to_be_placed_in_interrupt(void);
+void average_calculation_to_be_placed_in_interrupt(void);
+
+// called inside main_while_loop
+void rms_calculation_to_be_placed_in_while_loop(void);
+void avg_calculation_to_be_placed_in_while_loop(void);
 
 void instantaneousDiagnostics(void);   // Calculate instantaneous values
 void rmsDiagnostics(void);             // Calculate RMS values
 void averageDiagnostics(void);         // Calculate averages
+void stateControl(void);
 
+// Should be placed in State Control Code
 void inverterOff(void);
 void state0_Control_Code(void);
+void state1_Control_Code(void);
+
+// Should be called inside State1
+void voltageController(void);          // Voltage control loop
+void currentControlTriggered(void);    // Current control routine
+void dq_to_abc(void);                  // dq → abc transformation
 
 #endif

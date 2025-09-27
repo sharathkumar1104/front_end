@@ -1,0 +1,2 @@
+../Core/Src/rmsCalculations.c:5:6:rms_calculation_to_be_placed_in_interrupt	3
+../Core/Src/rmsCalculations.c:45:6:rms_calculation_to_be_placed_in_while_loop	3

@@ -1,7 +1,6 @@
 #include "variables.h"
 #include <stdbool.h>
 
-
 // Instantaneous Diagnostics
 void instantaneousDiagnostics(void)
 {
@@ -16,7 +15,7 @@ void instantaneousDiagnostics(void)
 	}
 	if(INST_GRID_CURRENT_OUT_OF_LIMITS)
 	{
-		error_flags.inst_grid_voltage = 1;
+		error_flags.inst_grid_current = 1;
 		inverterOff();
 		relayOff_counter_enable = 1;
 		state = state0;

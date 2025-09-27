@@ -229,6 +229,7 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
+
 //  PLL();
 //  abc_to_dq();
 //  if(check_if_PLL_locked()){
@@ -251,13 +252,73 @@ void TIM3_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
+//  if(measured_values.Ia == 100 && measured_values.Ib == 100 && measured_values.Ic == 100 &&
+//		  measured_values.Va == 400 && measured_values.Vb == 400 &&  measured_values.Vc == 400  )
+//  {
+//	  measured_values.Ia = 0;
+//	  measured_values.Ib = -10;
+//	  measured_values.Ic = -100;
+//	  measured_values.Va = -400;
+//	  measured_values.Vb = -400;
+//	  measured_values.Vc = -400;
+//
+//  }else if(measured_values.Ib == -10){
+//	 measured_values.Ia = 0;
+//	 measured_values.Ib = 50;
+//     measured_values.Ic = 100;
+//	 measured_values.Va = 400;
+//	 measured_values.Vb = 400;
+//	 measured_values.Vc = 400;
+//  }else{
+//	  measured_values.Ia = 100;
+//	 	 measured_values.Ib = 100;
+//	      measured_values.Ic = 100;
+//	 	 measured_values.Va = 400;
+//	 	 measured_values.Vb = 400;
+//	 	 measured_values.Vc = 400;
+//  }
+
+
+
+
   grid.Va = va_array[timer3_variables.sample_index];
   grid.Vb = vb_array[timer3_variables.sample_index];
   grid.Vc = vc_array[timer3_variables.sample_index];
 
+  grid.Ia = ia_array[timer3_variables.sample_index];
+  grid.Ib = ib_array[timer3_variables.sample_index];
+  grid.Ic = ic_array[timer3_variables.sample_index];
+
+  // for instantaneous values
+  instVal.Va_inst = va_array[timer3_variables.sample_index];
+  instVal.Vb_inst = vb_array[timer3_variables.sample_index];
+  instVal.Vc_inst = vc_array[timer3_variables.sample_index];
+
+  instVal.Ia_inst = ia_array[timer3_variables.sample_index];
+  instVal.Ib_inst = ib_array[timer3_variables.sample_index];
+  instVal.Ic_inst = ic_array[timer3_variables.sample_index];
+
+  instVal.Vdc_inst = 400;
+  instVal.Idc_inst = 100;
+
+  // for average calculation
+  avg_calculations.Vdc = 300;
+  avg_calculations.Idc = 100;
+
+  // for rms calculation
+  rms_calculations.Va = va_array[timer3_variables.sample_index];
+  rms_calculations.Vb = vb_array[timer3_variables.sample_index];
+  rms_calculations.Vc = vc_array[timer3_variables.sample_index];
+
+  rms_calculations.Ia = ia_array[timer3_variables.sample_index];
+  rms_calculations.Ib = ib_array[timer3_variables.sample_index];
+  rms_calculations.Ic = ic_array[timer3_variables.sample_index];
+
+
+//
   timer3_variables.sample_index = (timer3_variables.sample_index + 1);
 
-  if(timer3_variables.sample_index >= 359){
+  if(timer3_variables.sample_index > 359){
   	timer3_variables.sample_index = 0;
   }
 //
@@ -280,15 +341,18 @@ void TIM8_UP_TIM13_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim8);
   /* USER CODE BEGIN TIM8_UP_TIM13_IRQn 1 */
 
-//  PLL();
-//  abc_to_dq();
-//  check_if_PLL_locked();
-
+  adcReadings();
   Counters();
+  PLL();
+  abc_to_dq();
+  check_if_PLL_locked();
+  rms_calculation_to_be_placed_in_interrupt();
+  average_calculation_to_be_placed_in_interrupt();
+
   instantaneousDiagnostics();
   rmsDiagnostics();
   averageDiagnostics();
-//  stateControl();
+  stateControl();
 
   /* USER CODE END TIM8_UP_TIM13_IRQn 1 */
 }
