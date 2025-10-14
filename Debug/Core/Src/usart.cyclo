@@ -1,0 +1,2 @@
+../Core/Src/usart.c:4:6:usart_communication	10
+../Core/Src/usart.c:64:6:convert_txn_array_to_base64	7

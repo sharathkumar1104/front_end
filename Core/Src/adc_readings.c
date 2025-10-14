@@ -1,20 +1,5 @@
 #include "variables.h"
 
-//float Vab, Vbc, Vca;
-//float ia, ib, ic;
-//
-//float Va = (2 * Vab + Vbc)/3;
-//float Vb = -(2 * Vab + Vbc)/3;
-//float Vc = -(Vab + 2 * Vbc)/3;
-//
-//float Ia = ia;
-//float Ib = ib;
-//float Ic = ic;
-//
-//float Vdc = vdc;
-//float Idc = idc;
-//
-//
 //// input voltage         -600     --   0    -- 600
 //// transformer            -1      --   0    --  1
 //// off set introduced    1.65     --  1.65  -- 1.65
@@ -27,13 +12,9 @@
 //// multiplication factor -600/-1240.90  0/0    600/1240.9090
 //// recalculated           (adc-off) * multiplication_factor
 //// voltage recalculated given to Vab , Vbc, Vca , ia, ib, ic, vdc, idc
-//
 //float a = adc[0]; // Vab  --> 806.59
-//
 //a = a - offset;
-//
 //multiplication_factor = input/a;
-//
 //vab = multiplication_factor * a;
 
 //	float voltage_offset = 2047.5;
@@ -47,21 +28,21 @@
 void adcReadings(void){
 
 	// OffSet and Multiplication factor
-	adc_read.offSet              = 2047.5f;
-	adc_read.voltage_gain_factor = 0.4835164835f;
-	adc_read.current_gain_factor = 0.4835164835f;
-	adc_read.Vdc_gain_factor     = 0.4835164835f;
-	adc_read.Idc_gain_factor     = 0.4835164835f;
+	adc_read.offSet              = 2306.05802;       // 2047.5f;
+	adc_read.voltage_gain_factor = 0.4293040293f;
+	adc_read.current_gain_factor = 0.4293040293f;  //0.30835164835f;
+	adc_read.Vdc_gain_factor     = 0.4293040293f;
+	adc_read.Idc_gain_factor     = 0.4293040293f;
 
 	// raw adc values
-	adc_read.Vab_in = adc_buffer[0];
-	adc_read.Vbc_in = adc_buffer[1];
-	adc_read.Vca_in = adc_buffer[2];
-	adc_read.ia_in  = adc_buffer[3];
-	adc_read.ib_in  = adc_buffer[4];
-	adc_read.ic_in  = adc_buffer[5];
-	adc_read.Vdc_in = adc_buffer[6];
-	adc_read.idc_in = adc_buffer[7];
+	adc_read.Vab_in = adc_buffer[0];  //PA1
+	adc_read.Vbc_in = adc_buffer[1];  //PA2
+	adc_read.Vca_in = adc_buffer[2];  //PB0
+	adc_read.ia_in  = adc_buffer[3];  //PB1
+	adc_read.ib_in  = adc_buffer[4];  //PC0
+	adc_read.ic_in  = adc_buffer[5];  //PC1
+	adc_read.Vdc_in = adc_buffer[6];  //PC3
+	adc_read.idc_in = adc_buffer[7];  //PC2
 
 	// adc - offset
 	adc_read.Vab_corrected = (float)adc_read.Vab_in - adc_read.offSet;

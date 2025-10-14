@@ -11,6 +11,14 @@
 #define ADC_LENGHT      8                        // 8 samples
 #define DELAY_10_SEC    100000                   // 10s at 100us handler
 
+// USART COMMUNICATION
+#define DATA_TYPE  uint8_t
+#define SIZE_OF_DATA_TYPE sizeof(DATA_TYPE)
+#define TXN_ARRAY_SIZE  ((200/SIZE_OF_DATA_TYPE) + (SIZE_OF_DATA_TYPE * 2))
+#define BASE64_SIZE  ((SIZE_OF_DATA_TYPE * 2) + (((TXN_ARRAY_SIZE - 2) * SIZE_OF_DATA_TYPE + 2) / 3 * 4))
+/*------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 #define INST_GRID_VOLTAGE_OUT_OF_LIMITS        (instVal.Va_inst > UCoffLimit.Va_inst || instVal.Va_inst < LCoffLimit.Va_inst ||     \
 	                                            instVal.Vb_inst > UCoffLimit.Vb_inst || instVal.Vb_inst < LCoffLimit.Vb_inst ||     \
 	                                            instVal.Vc_inst > UCoffLimit.Vc_inst || instVal.Vc_inst < LCoffLimit.Vc_inst)
@@ -59,6 +67,7 @@ typedef enum {
     state1,     // intermediate state
     state2      // on state
 } StateControl;
+
 
 
 
@@ -310,9 +319,38 @@ struct Adc_Readings
     float Vdc_recalculated;
     float Idc_recalculated;
     float Va, Vb, Vc, ia, ib, ic, Vdc, Idc;
-
 };
 
+
+// USART
+struct USART_COMM
+{
+   volatile bool transmission_enable;
+   volatile int array_population_index;
+   volatile int array_transmission_index;
+   volatile int adc_value;
+   volatile bool start_of_transmission;
+   volatile bool convert_txn_array_to_base64;
+   volatile float adc_scaled_value;
+};
+
+// BASE64
+struct base64
+{
+	uint16_t output_index;
+	uint32_t octet_a;
+	uint32_t octet_b;
+	uint32_t octet_c;
+	uint32_t triple;
+	uint16_t input_len;
+};
+
+extern volatile uint8_t txn_buffer;
+extern volatile DATA_TYPE txn_array[TXN_ARRAY_SIZE];
+extern volatile uint8_t *uart_send_data_pointer;
+extern volatile struct base64 base64_variables;
+extern const uint8_t *data;
+extern char base64_txn[BASE64_SIZE];
 
 /***********************************************************************/
 //                     Global Variables
@@ -342,19 +380,10 @@ extern volatile struct Limit_Parameters LCinLimit;
 extern volatile struct Rms_Calculations rms_calculations;
 extern volatile struct Rms_Calculations final_squared_sum;
 extern volatile struct Avg_of_mean_square avg_of_mean_square;
-//extern volatile bool rms_calculation_busy_flag;
-//extern volatile bool rms_calculation_req;
-//extern volatile int n;
-//extern volatile int final_N;
+
 
 extern volatile struct Avg_Calculations avg_calculations;
 extern volatile struct Avg_Calculations final_sum;
-//extern volatile bool avg_calculation_busy_flag;
-//extern volatile bool avg_calculation_req;
-//extern volatile int m;
-//extern volatile int final_M;
-//extern volatile float theta_prev;
-//extern volatile float theta;
 
 // DIAGNOSTICS VARIABLES
 extern volatile struct RMS_Variables rmsVal;
@@ -373,6 +402,9 @@ extern const float ia_array[];
 extern const float ib_array[];
 extern const float ic_array[];
 
+extern const float Vdc_array[];
+extern const float idc_array[];
+
 // CONTROL LOOPS
 extern volatile struct Voltage_Controller_Variables voltage_ctrl;
 extern volatile struct Current_Controller_Variables current_ctrl;
@@ -381,6 +413,9 @@ extern volatile struct dq_to_abc abc_form;
 // TIMERS
 extern volatile struct Timer3_Variables timer3_variables;
 
+//
+extern volatile struct USART_COMM usart_comm;
+extern const char base64_chars[];
 
 
 /***********************************************************************/
@@ -420,5 +455,8 @@ void state1_Control_Code(void);
 void voltageController(void);          // Voltage control loop
 void currentControlTriggered(void);    // Current control routine
 void dq_to_abc(void);                  // dq → abc transformation
+
+void usart_communication(void);
+void convert_txn_array_to_base64(void);
 
 #endif
