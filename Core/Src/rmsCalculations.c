@@ -10,6 +10,8 @@ void rms_calculation_to_be_placed_in_interrupt(void)
 		if((rms_calculations.theta > 4) && (rms_calculations.busy_flag == 0))
 		{
 
+			// when theta value reaches 4 i.e,. half of the cycles adds to final values for root mean square calculation
+
 			final_squared_sum.Ia_sum = rms_calculations.Ia_sum;
 			final_squared_sum.Ib_sum = rms_calculations.Ib_sum;
 			final_squared_sum.Ic_sum = rms_calculations.Ic_sum;
@@ -31,6 +33,8 @@ void rms_calculation_to_be_placed_in_interrupt(void)
 			rms_calculations.n = 0;
 		}
 
+		// runs every time when the function called and makes the square sum and calculates n until it reaches theta > 4
+
 		rms_calculations.Ia_sum = rms_calculations.Ia_sum + (rms_calculations.Ia * rms_calculations.Ia);
 		rms_calculations.Ib_sum = rms_calculations.Ib_sum + (rms_calculations.Ib * rms_calculations.Ib);
 		rms_calculations.Ic_sum = rms_calculations.Ic_sum + (rms_calculations.Ic * rms_calculations.Ic);
@@ -42,6 +46,8 @@ void rms_calculation_to_be_placed_in_interrupt(void)
 		rms_calculations.n = rms_calculations.n+1;
 }
 
+
+// placed in separate function which is called inside main while loop to avoid more time or more cycles
 void rms_calculation_to_be_placed_in_while_loop(void)
 {
 	if(rms_calculations.request == 1)

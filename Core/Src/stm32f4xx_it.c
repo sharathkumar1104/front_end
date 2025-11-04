@@ -187,7 +187,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
-
+  HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -248,7 +248,6 @@ void TIM3_IRQHandler(void)
         if(timer3_variables.sample_index > 359){
         	timer3_variables.sample_index = 0;
         }
-
     }
 
   /* USER CODE END TIM3_IRQn 0 */

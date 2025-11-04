@@ -1,0 +1,2 @@
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h:800:26:LL_GPIO_IsInputPinSet	16	static
+../Core/Src/digital_Readings.c:5:6:digitalReadings	8	static

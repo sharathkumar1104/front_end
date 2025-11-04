@@ -8,7 +8,7 @@
 //                          Definitions
 /***********************************************************************/
 
-#define ADC_LENGHT      8                        // 8 samples
+#define ADC_LENGHT      15                        // 8 samples
 #define DELAY_10_SEC    100000                   // 10s at 100us handler
 
 // USART COMMUNICATION
@@ -299,9 +299,23 @@ struct Adc_Readings
 	float current_gain_factor;
 	float Vdc_gain_factor;
 	float Idc_gain_factor;
+	float bat_i_gain_factor;
+    float bat_volt_gain_factor;
+    float inter_i_gain_factor;
+    float inter_volt_gain_factor;
+    float inv_temp_gain_factor;
+    float v_ref_gain_factor;
+    float earth_fault_gain_factor;
+
+
 	int Vab_in, Vbc_in, Vca_in;
 	int ia_in, ib_in, ic_in;
-    float Vdc_in, idc_in;
+    int Vdc_in, idc_in;
+
+    int battery_volt_in, battery_i_in;
+	int inter_volt_in, inter_i_in;
+	int inv_temp_in, v_ref_in, earth_fault_in;
+
     float Vab_corrected;
     float Vbc_corrected;
     float Vca_corrected;
@@ -310,6 +324,15 @@ struct Adc_Readings
     float ic_corrected;
     float Vdc_corrected;
     float Idc_corrected;
+
+    float bat_volt_corrected;
+    float bat_i_corrected;
+    float inter_volt_corrected;
+    float inter_i_corrected;
+    float inv_temp_corrected;
+    float v_ref_corrected;
+    float earth_fault_corrected;
+
     float Vab_recalculated;
     float Vbc_recalculated;
     float Vca_recalculated;
@@ -318,7 +341,32 @@ struct Adc_Readings
     float ic_recalculated;
     float Vdc_recalculated;
     float Idc_recalculated;
+
+    float bat_volt_recalculated;
+    float bat_i_recalculated;
+    float inter_volt_recalculated;
+    float inter_i_recalculated;
+    float inv_temp_recalculated;
+    float v_ref_recalculated;
+    float earth_fault_recalculated;
+
     float Va, Vb, Vc, ia, ib, ic, Vdc, Idc;
+
+    float battery_volt, battery_i;
+    float intermediate_volt, intermediate_i;
+    float inv_temp;
+    float v_ref, earth_fault;
+};
+
+struct digital_Readings{
+	uint8_t inv_temp_fail;
+	uint8_t switch_in;
+	uint8_t driver_supply_ok;
+	uint8_t zc;
+	uint8_t extra_digi_1;
+	uint8_t extra_digi_2;
+	uint8_t extra_digi_3;
+	uint8_t extra_digi_4;
 };
 
 
@@ -359,6 +407,9 @@ extern char base64_txn[BASE64_SIZE];
 // ADC
 extern volatile struct Adc_Readings adc_read;
 extern volatile uint16_t adc_buffer[ADC_LENGHT];
+
+// Digital
+extern volatile struct digital_Readings digital_read;
 
 // COUNTERS
 extern volatile struct Counters counters;

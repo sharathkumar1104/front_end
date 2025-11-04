@@ -13,4 +13,4 @@
 ../Core/Src/stm32f4xx_it.c:185:6:SysTick_Handler	1
 ../Core/Src/stm32f4xx_it.c:206:6:TIM3_IRQHandler	3
 ../Core/Src/stm32f4xx_it.c:265:6:TIM8_UP_TIM13_IRQHandler	2
-../Core/Src/stm32f4xx_it.c:294:6:DMA2_Stream0_IRQHandler	2
+../Core/Src/stm32f4xx_it.c:295:6:DMA2_Stream0_IRQHandler	2

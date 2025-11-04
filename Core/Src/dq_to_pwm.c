@@ -50,5 +50,8 @@ void dq_to_abc(void){
 	  TIM8->CCR2 = (uint16_t)abc_form.m_out_b;
 	  TIM8->CCR3 = (uint16_t)abc_form.m_out_c;
 
+//	  TIM1->CCR1 = (uint16_t)abc_form.m_out_a;
+//	  TIM1->CCR2 = (uint16_t)abc_form.m_out_b;
+
 }
 

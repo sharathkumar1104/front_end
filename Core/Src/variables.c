@@ -12,6 +12,9 @@
 volatile uint16_t adc_buffer[ADC_LENGHT];
 volatile struct Adc_Readings adc_read={0};
 
+// DIGITAL READINGS
+volatile struct digital_Readings digital_read = {0};
+
 // COUNTERS
 volatile struct Counters counters     ={0};
 volatile bool relayOff_counter_enable = 0;
